@@ -24,7 +24,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, KeepAlive, reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 //定义路由
 import { useSystemStore } from "@/stores/theme.js";

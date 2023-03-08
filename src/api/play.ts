@@ -1,5 +1,4 @@
 import { http } from "@/utils/request";
-import type { trackAllParams } from "./type";
 /**
 必选参数 : id : 音乐 id 
 level: 播放音质等级, 分为 standard => 标准,
