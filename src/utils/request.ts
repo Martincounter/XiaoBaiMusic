@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "@/router";
-import { showToast } from "vant";
+import { showNotify } from "vant";
+import "vant/es/notify/style";
 import type {
   AxiosInstance,
   AxiosError,
@@ -100,7 +101,8 @@ service.interceptors.response.use(
         message = "网络连接故障";
     }
     // showNotify({ type: "danger", message: message });
-    showToast("提示内容");
+    showNotify({ message: message, duration: 1500 });
+
     // alert(message);
 
     return Promise.reject(error);

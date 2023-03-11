@@ -14,7 +14,7 @@ const getData = () => {
 <style scoped lang="less">
 .container-com {
   .body {
-    padding: var(--padding-contain);
+    // padding: var(--padding-contain);
   }
 }
 </style>

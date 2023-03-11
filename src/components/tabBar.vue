@@ -5,6 +5,7 @@
         <component :is="Component" :key="$route.name" />
       </KeepAlive>
     </router-view>
+    <MusicPlayer></MusicPlayer>
     <div class="tab-bar">
       <div
         class="tab-bar__text"
@@ -21,6 +22,7 @@
         ></i>
       </div>
     </div>
+    <div class="placeholder"></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -29,8 +31,11 @@ import { useRouter } from "vue-router";
 //定义路由
 import { useSystemStore } from "@/stores/theme.js";
 import "@/assets/icon.css";
+import MusicPlayer from "./musicPlayer.vue";
 const systemStore = useSystemStore();
+
 systemStore.initMode();
+
 const currentIndex = ref<number>(0);
 const router = useRouter();
 const menuList = reactive([
@@ -66,6 +71,10 @@ const change = (e: string, i: number) => {
     font-size: 22px;
   }
 }
+.placeholder {
+  height: 65px;
+  z-index: -1;
+}
 .tab-bar {
   position: fixed;
   bottom: 0;
@@ -74,6 +83,7 @@ const change = (e: string, i: number) => {
   display: flex;
   backdrop-filter: var(--bg-filter);
   -webkit-backdrop-filter: var(--bg-filter);
+  height: 63px;
   // border-top: 1px solid var(--color-border);
 }
 .tab-bar__text {

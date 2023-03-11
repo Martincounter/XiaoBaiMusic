@@ -15,3 +15,8 @@
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+.van-notify {
+  border-radius: 8px;
+  margin: 15px 10px 0 10px;
+  width: calc(100% - 20px) !important;
+}

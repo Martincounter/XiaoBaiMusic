@@ -94,15 +94,18 @@ const userName = ref<string>("martin");
 
 const getData = async () => {
   await showLoading();
-  const res = await Promise.all([
-    getTopList(),
-    getTopListOfArtist(1),
-    getPersonalized(),
-  ]);
-  allToplist.data = res[0]; //所有榜单
-  topListOfArtistList.data = res[1]; //歌手榜
-  personalizedList.data = res[2]; //推荐歌单
-  await hideLoading();
+  try {
+    const res = await Promise.all([
+      getTopList(),
+      getTopListOfArtist(1),
+      getPersonalized(),
+    ]);
+    allToplist.data = res[0]; //所有榜单
+    topListOfArtistList.data = res[1]; //歌手榜
+    personalizedList.data = res[2]; //推荐歌单
+  } finally {
+    await hideLoading();
+  }
 };
 const showLoading = () => {
   loading.value = true;
@@ -150,11 +153,16 @@ const getTopList = async () => {
   const res = await toplist();
   return randomGetArr(res.list, 6);
 };
-const goMusicListDetails = (e: { id: number | string }) => {
-  // router.push("/playListDetails/" + e.id);
+const goMusicListDetails = (e: { id: number | string; alias: [] }) => {
+  let type = "";
+  if (e.alias) {
+    type = "artist"; // 有别名就为歌手
+  } else {
+    type = "playList"; // 否则为歌单
+  }
   router.push({
     name: "PlayListDetails",
-    params: { id: e.id },
+    params: { id: e.id, type: type },
   });
 };
 
@@ -199,7 +207,7 @@ const loginFn = async () => {
     }
   }
   .body {
-    padding: var(--padding-contain);
+    // padding: var(--padding-contain);
   }
 }
 </style>

@@ -28,7 +28,12 @@ const router = createRouter({
           component: () => import("../views/mineView.vue"),
         },
         {
-          path: "playListDetails/:id",
+          path: "error",
+          name: "error",
+          component: () => import("../components/errorPage.vue"),
+        },
+        {
+          path: "playListDetails/:id/:type",
           name: "PlayListDetails",
           component: () => import("../views/playListDetails.vue"),
         },

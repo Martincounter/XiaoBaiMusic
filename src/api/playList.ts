@@ -29,3 +29,10 @@ export function trackAll(data: trackAllParams) {
     `/playlist/track/all?id=${data.id}&limit=${data.limit}&offset=${data.offset}`
   );
 }
+/**
+ * 获取歌单详情D
+ * 必选参数 : id : 歌单 id
+ */
+export function playlistDetail(id: string | number) {
+  return http.get(`/playlist/detail?id=${id}`);
+}

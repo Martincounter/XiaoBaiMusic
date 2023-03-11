@@ -5,6 +5,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import { Lazyload } from "vant";
+
 import "./assets/main.css";
 
 const app = createApp(App);
@@ -13,5 +14,6 @@ app.use(createPinia().use(piniaPluginPersistedstate));
 // app.use(createPinia());
 app.use(router);
 app.use(Lazyload);
+// app.use(Toast);
 
 app.mount("#app");
