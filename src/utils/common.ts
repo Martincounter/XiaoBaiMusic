@@ -7,7 +7,5 @@ export const randomGetArr = (data: [], length: number = 1) => {
     if (!indexArr.includes(tmp)) indexArr.push(tmp);
   }
   result = data.filter((l: any, index: number) => indexArr.includes(index));
-  console.log(result);
-
   return result;
 };

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types"]
+    "types": ["node"],
+    "typeRoots": ["./types"],
   },
   "files": [],
   "references": [

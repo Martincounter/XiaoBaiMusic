@@ -19,6 +19,9 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.74);
   --vt-c-text-dark-3: rgba(255, 255, 255, 0.548);
+  --bg-filter: blur(20px); /*全局模糊*/
+  --bg-filter-dark: #222222bf;/*暗色模糊背景*/
+  --bg-filter-light:#f2f1f1bf;/*亮色模糊背景*/
 }
 
 /* semantic color variables for this project */
@@ -32,8 +35,9 @@
   --color-text: var(--vt-c-text-light-1);
   --color-active: var(--vt-c-text-active-light);
   --padding-contain: 10px 15px 55px;
-  --bg-filter: blur(105px);
-  --color-gray: var(--vt-c-gary)
+  --color-gray: var(--vt-c-gary);
+  --filter: var(--bg-filter);
+  --filter-bg:var(--bg-filter-light)
 }
 
   :root[prefers-color-scheme='dark'] {
@@ -45,7 +49,9 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
     --color-active: var(var(--vt-c-text-active-dark));
-    --color-gray: var(--vt-c-text-dark-3)
+    --color-gray: var(--vt-c-text-dark-3);
+    --filter: var(--bg-filter);
+    --filter-bg:var(--bg-filter-dark)
 
   }
 

@@ -1,7 +1,6 @@
 <template>
   <div class="container-com">
     <div class="header" id="header">
-      <ImageGradientBackground :imageSrc="detailData.coverImgUrl" />
       <div class="img">
         <van-image
           width="10rem"
@@ -18,8 +17,11 @@
       <div class="info">
         <div class="name">{{ detailData.name }}</div>
         <div class="tags">{{ detailData.tags.join("·") }}</div>
-
         <div class="description ellipsis-2">{{ detailData.description }}</div>
+      </div>
+      <div>
+        <span>播放</span>
+        <span>随机播放</span>
       </div>
     </div>
     <div class="list">
@@ -27,11 +29,10 @@
         class="list-item"
         v-for="item in detailData.tracks"
         :key="item.id"
-        @click="getSongUrl(item.id)"
+        @click="getSongUrl(item)"
       >
-        {{ item.name }}
+        {{ item.musicName }}
       </div>
-      <!-- <audio controls :src="url"></audio> -->
     </div>
   </div>
   <loading-page v-show="loading"></loading-page>
@@ -39,14 +40,13 @@
 
 <script lang="ts" setup>
 import LoadingPage from "@/components/loadingPage.vue";
-import ImageGradientBackground from "@/components/imageBackGround.vue";
 
 import { useRoute } from "vue-router";
 import { reactive, ref, onActivated } from "vue";
 import { trackAll, playlistDetail } from "@/api/playList";
 import { artistTopSong } from "@/api/artist";
 import { getSongUrlById } from "@/api/play";
-import { updateCurrURL } from "@/utils/storesUtils";
+import { updateCurrMusics, updateCurrPlay } from "@/utils/storesUtils";
 onActivated(() => {
   const { params } = useRoute();
   listParams.id = params.id as string | number;
@@ -57,7 +57,6 @@ onActivated(() => {
     getListData();
   }
 });
-const imageUrl = ref<string>("");
 interface resType {
   id: string | number;
   name: string | number;
@@ -68,7 +67,6 @@ type paramsType = {
   limit?: number;
   offset?: number;
 };
-let musicList = ref<resType[] | null>(null);
 const tracks = reactive<resType[]>([]);
 let detailData = reactive({
   tracks,
@@ -76,6 +74,7 @@ let detailData = reactive({
   name: "",
   coverImgUrl: "",
   description: "",
+  id: "",
 });
 const listParams: paramsType = reactive({
   id: "",
@@ -88,17 +87,9 @@ const loading = ref<boolean>(false);
 const getListData = async () => {
   await showLoading();
   try {
-    const res = await Promise.all([getPlayListDetail()]);
-    // musicList.value = res[0].playlist.tracks;
+    const res = await Promise.all([getPlayListDetail()]); // 查看歌单详情的歌曲只有20首 TODO 登陆后需要调用getMusicList获取全部歌曲
+    res[0].playlist.tracks = handlePlayList(res[0].playlist.tracks);
     detailData = res[0].playlist;
-    // const ele = document.getElementsByClassName("header");
-    // createGradientBackground(res[0].playlist.coverImgUrl, "header")
-    //   .then((color) => {
-    //     console.log(color);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
     console.log(detailData);
   } finally {
     await hideLoading();
@@ -108,7 +99,7 @@ const getArtistData = async () => {
   await showLoading();
   try {
     const res = await Promise.all([getArtistTopSong()]);
-    musicList.value = res[0].songs;
+    detailData = res[0].songs;
   } finally {
     await hideLoading();
   }
@@ -121,25 +112,50 @@ const hideLoading = () => {
 };
 // 获取歌单中歌曲
 const getMusicList = async () => {
-  const res = await trackAll(listParams);
-  return res;
+  return await trackAll(listParams);
 };
 // 获取歌单详情
 const getPlayListDetail = async () => {
-  const res = await playlistDetail(listParams.id);
-  return res;
+  return await playlistDetail(listParams.id);
 };
 // 获取歌手热门50歌曲
 const getArtistTopSong = async () => {
-  const res = await artistTopSong(listParams.id);
-  return res;
+  return await artistTopSong(listParams.id);
+};
+const handlePlayList = (data: any) => {
+  if (!data) return [];
+  let newArr = [];
+  for (let i of data) {
+    let obj = {
+      id: i.id || "",
+      imgUrl: i.al?.picUrl || "",
+      musicName: i.name || "",
+    };
+    newArr.push(obj);
+  }
+  return newArr;
 };
 // 获取歌曲url
-const url = ref<string>("");
-const getSongUrl = async (id: string | number) => {
-  const res = await getSongUrlById(id);
-  url.value = res.data[0].url;
-  updateCurrURL(res.data[0].url);
+// const url = ref<string>("");
+const getSongUrl = async (item: {
+  musicName: string;
+  imgUrl: string;
+  id: string;
+}) => {
+  console.log(item);
+  const res = await getSongUrlById(item.id);
+  const stateParams = {
+    id: item.id,
+    url: res.data[0].url as string,
+    imgUrl: item.imgUrl as string,
+    musicName: item.musicName as string,
+  };
+  const statusParams = {
+    isPlay: true,
+    listId: detailData.id,
+  };
+  updateCurrMusics(stateParams, detailData.tracks as [], statusParams);
+  updateCurrPlay(true)
 };
 </script>
 <style scoped lang="less">

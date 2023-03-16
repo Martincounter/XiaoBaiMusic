@@ -28,7 +28,7 @@
   </van-pull-refresh>
 </template>
 <script setup lang="ts">
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 type type = {
   loading?: boolean;
 };

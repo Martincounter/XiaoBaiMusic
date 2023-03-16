@@ -1,5 +1,7 @@
 <template>
   <div class="container-com">
+    <div class="header-placeholder"></div>
+
     <div class="header">
       <div class="header-user">
         <i class="iconfont icon-account-circle-line"></i>
@@ -54,17 +56,12 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { login } from "@/api/auth";
 import { personalized, toplist } from "@/api/playList";
 import { topListOfArtist } from "@/api/artist";
 import { reactive, ref, onMounted } from "vue";
 import { useSystemStore } from "@/stores/theme.js";
 import { storeToRefs } from "pinia";
-import pullRefresh from "@/components/pullRefresh.vue";
-import horizontalScroll from "@/components/horizontalScroll.vue";
-import barOfType from "@/components/barOfType.vue";
 import { randomGetArr } from "@/utils/common";
-import { Md5 } from "ts-md5";
 const systemStore = useSystemStore();
 const { currMode, modeList } = storeToRefs(systemStore);
 const router = useRouter();
@@ -72,17 +69,9 @@ const router = useRouter();
 onMounted(() => {
   getData();
 });
-interface loginParams {
-  phone: string;
-  password: string;
-}
 
 const loading = ref<boolean>(false);
-const loginForm = reactive<loginParams>({
-  phone: "18933754163",
-  password: "yyz000801",
-});
-const countryCode = ref<string>("+86");
+
 const typeBarList = reactive([
   { name: "1", title: "华语" },
   { name: "2", title: "欧美" },
@@ -166,32 +155,25 @@ const goMusicListDetails = (e: { id: number | string; alias: [] }) => {
   });
 };
 
-const loginFn = async () => {
-  const md5: any = new Md5();
-  const params = {
-    countrycode: countryCode.value.replace("+", "").replace(/\s/g, ""),
-    md5_password: Md5.hashStr(loginForm.password),
-    phone: loginForm.phone.replace(/\s/g, ""),
-    password: "fakePassword",
-  };
-  console.log(params);
 
-  const res = await login(params);
-  console.log(res);
-};
 </script>
 
 <style scoped lang="less">
 .container-com {
+  .header-placeholder{
+    height: 77px;
+  }
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 8px 15px 5px;
-    position: sticky;
+    position: fixed;
     z-index: 1;
+    width: 100%;
     backdrop-filter: var(--bg-filter);
     -webkit-backdrop-filter: var(--bg-filter);
+    background-color: var(--filter-bg);
     top: 0;
 
     &-text {
@@ -207,7 +189,7 @@ const loginFn = async () => {
     }
   }
   .body {
-    // padding: var(--padding-contain);
+    padding: 10px 15px;
   }
 }
 </style>

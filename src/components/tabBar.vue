@@ -41,19 +41,19 @@ const router = useRouter();
 const menuList = reactive([
   {
     icon: "yanchu",
-    name: "home",
+    name: "/home",
   },
   {
     icon: "menu-line",
-    name: "playList",
+    name: "/playList",
   },
   {
     icon: "search-line",
-    name: "search",
+    name: "/search",
   },
   {
     icon: "user-3-line",
-    name: "mine",
+    name: "/mine",
   },
 ]);
 const change = (e: string, i: number) => {
@@ -72,7 +72,7 @@ const change = (e: string, i: number) => {
   }
 }
 .placeholder {
-  height: 65px;
+  height: 63px;
   z-index: -1;
 }
 .tab-bar {
@@ -83,6 +83,7 @@ const change = (e: string, i: number) => {
   display: flex;
   backdrop-filter: var(--bg-filter);
   -webkit-backdrop-filter: var(--bg-filter);
+  background-color: var(--filter-bg);
   height: 63px;
   // border-top: 1px solid var(--color-border);
 }
